@@ -25,13 +25,15 @@ export default class UUIDCacheManager {
   }
 
   private static async readUUIDCache(): Promise<UUIDCache> {
-    const content: UUIDCache = JSON.parse((await this.cacheFileHandle.readFile()).toString("utf8"));
+    const content: UUIDCache = JSON.parse(await this.cacheFileHandle.readFile({ encoding: "utf8" }));
     return content;
   }
 
   private static async writeUUIDCache(uuidCache: UUIDCache): Promise<boolean> {
     try {
-      await this.cacheFileHandle.writeFile(JSON.stringify(uuidCache), { encoding: "utf8", flag: "w" });
+      await this.cacheFileHandle.truncate();
+      await this.cacheFileHandle.writeFile(JSON.stringify(uuidCache), { encoding: "utf8" });
+      await this.cacheFileHandle.sync();
       return true;
     } catch {
       return false;
