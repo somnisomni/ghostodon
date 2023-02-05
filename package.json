@@ -4,7 +4,7 @@
   "description": "Ghost-Mastodon post sharing bridge server",
   "main": "src/app.ts",
   "scripts": {
-    "start": "ts-node .",
+    "start": "ts-node src/app.ts",
     "build": "tsc",
     "lint": "eslint ."
   },
@@ -25,12 +25,15 @@
   "homepage": "https://github.com/somnisomni/Ghostodon#readme",
   "packageManager": "yarn@3.4.1",
   "devDependencies": {
-    "@types/node": "^18.11.19",
+    "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
     "eslint": "latest",
     "ts-node": "latest",
     "typescript": "latest",
     "typescript-eslint": "latest"
+  },
+  "dependencies": {
+    "fastify": "latest"
   }
 }
