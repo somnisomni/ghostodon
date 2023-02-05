@@ -1,7 +1,8 @@
 import fastify, { FastifyLoggerOptions } from "fastify";
 import { FastifyInstance } from "fastify";
-import { GhostWebhookPost } from "interface/ghost";
-import path from "path";
+import { GhostWebhookPost } from "./interface/ghost";
+import { SERVER_LOG_FILE_PATH } from "./constants";
+import UUIDCacheManager from "./uuid-cache";
 import config from "../config/config.json";
 
 export default class WebhookListener {
@@ -11,7 +12,7 @@ export default class WebhookListener {
     const loggerOption: Record<string, boolean | FastifyLoggerOptions> = {
       enabled: {
         level: config.logging.loglevel || "info",
-        file: path.resolve(__dirname, "..", "config", "server.log"),
+        file: SERVER_LOG_FILE_PATH,
       },
       disabled: false,
     };
@@ -38,11 +39,13 @@ export default class WebhookListener {
         reply.send("ALIVE");
       });
 
-      // Ghost new post created → Mastodon new status
+      // Ghost new post published → Mastodon new status
       this.server.post("/post/new", (request, reply) => {
-        // new
         const body = (request.body as GhostWebhookPost).post.current;
-        console.log(`CREATED: ${body.title} (${body.url})`);
+        console.log(`PUBLISHED: ${body.title} (${body.url})`);
+
+        // Once published, uuid of the post should be stored to prevent recreate status after unpublish-publish
+        UUIDCacheManager.cacheUUID(body.uuid);
 
         reply.code(200).send("OK");
       });
