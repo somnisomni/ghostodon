@@ -30,7 +30,7 @@ export default class WebhookListener {
 
       if(!("post" in (request.body as Record<string, unknown>))) {
         console.warn("  └ No 'post' property in request body; is it valid Webhook request from Ghost?");
-        reply.code(500).send("ERROR");
+        reply.code(500).send("ERROR, NOT A VALID WEBHOOK REQUEST");
         return null;
       }
 
@@ -67,7 +67,7 @@ export default class WebhookListener {
 
         if(!config.bridge.newStatus.onPostPublished) {
           console.log("  └ Creating new status on post publish is disabled. Nothing to do.");
-          reply.code(200).send("OK, NOT_SHARED");
+          reply.code(200).send("OK, SHARING SKIPPED");
           return;
         }
 
@@ -75,12 +75,15 @@ export default class WebhookListener {
         const response = await createStatus(`Update! 『${body.title}』\n\n${body.url}`);
         if("error" in response) {
           console.error(`    └ Failed to create a new Mastodon status: ${response.error}`);
+          reply.code(500).send("ERROR, FAILED TO SHARE");
+          return;
         } else {
           console.log(`    └ Status successfully created. (${response.url})`);
         }
 
-        console.log(`  └ Caching UUID ${body.uuid}.`);
+        console.log(`  └ Caching UUID ${body.uuid}...`);
         await UUIDCacheManager.cacheUUID(body.uuid);
+        console.log("  └ UUID cached.");
 
         console.log();
         reply.code(200).send("OK");
