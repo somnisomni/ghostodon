@@ -7,8 +7,7 @@
     "loglevel": "info"
   },
   "ghost": {
-    "instanceHost": "blog.example.com",
-    "webhookContentApiKey": "00000000000000000000000000"
+    "instanceHost": "blog.example.com"
   },
   "mastodon": {
     "accessToken": "0000000000000000000-00000000000000000000000"
@@ -17,7 +16,7 @@
     "redirectGhostInstanceIfNotFound": true,
     "newStatus": {
       "onPostPublished": true,
-      "onPostUpdated": true
+      "onPostUpdated": false
     }
   }
 }

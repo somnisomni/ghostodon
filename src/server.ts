@@ -1,5 +1,6 @@
 import fastify, { FastifyLoggerOptions } from "fastify";
 import { FastifyInstance } from "fastify";
+import { GhostWebhookPost } from "interface/ghost";
 import path from "path";
 import config from "../config/config.json";
 
@@ -37,14 +38,22 @@ export default class WebhookListener {
         reply.send("ALIVE");
       });
 
-      // Ghost new post published → Mastodon new status
+      // Ghost new post created → Mastodon new status
       this.server.post("/post/new", (request, reply) => {
         // new
+        const body = (request.body as GhostWebhookPost).post.current;
+        console.log(`CREATED: ${body.title} (${body.url})`);
+
+        reply.code(200).send("OK");
       });
 
       // Ghost post update → Mastodon new status
       this.server.post("/post/update", (request, reply) => {
         // update
+        const body = (request.body as GhostWebhookPost).post.current;
+        console.log(`UPDATED: ${body.title} (${body.url})`);
+
+        reply.code(200).send("OK");
       });
     }
   }

@@ -1,11 +1,6 @@
 /* Not well-typed yet; can be updated later */
 
-export interface GhostDraftPost {
-  status: "draft" | "published" | string,
-  updated_at: string,
-}
-
-export interface GhostPublishedPost extends GhostDraftPost {
+export interface GhostPost {
   id: string,
   uuid: string,
   title: string,
@@ -16,9 +11,11 @@ export interface GhostPublishedPost extends GhostDraftPost {
   plaintext: string,
   feature_image: string | null,
   featured: boolean,
+  status: "draft" | "published" | string,
   visibility: "public" | string,
   created_at: string,
   published_at: string,
+  updated_at: string,
   custom_excerpt: string | null,
   codeinjection_head: string | null,
   codeinjection_foot: string | null,
@@ -49,9 +46,9 @@ export interface GhostPublishedPost extends GhostDraftPost {
   email_only: boolean,
 }
 
-export interface GhostWebhookPublish {
+export interface GhostWebhookPost {
   post: {
-    current: GhostPublishedPost,
-    previous: GhostPublishedPost,
+    current: GhostPost,
+    previous: GhostPost,
   }
 }
