@@ -1,0 +1,23 @@
+{
+  "server": {
+    "port": 50000
+  },
+  "logging": {
+    "enable": true,
+    "loglevel": "info"
+  },
+  "ghost": {
+    "instanceHost": "blog.example.com",
+    "webhookContentApiKey": "00000000000000000000000000"
+  },
+  "mastodon": {
+    "accessToken": "0000000000000000000-00000000000000000000000"
+  },
+  "bridge": {
+    "redirectGhostInstanceIfNotFound": true,
+    "newStatus": {
+      "onPostPublished": true,
+      "onPostUpdated": true
+    }
+  }
+}
