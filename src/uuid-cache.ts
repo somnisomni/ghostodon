@@ -8,12 +8,12 @@ export default class UUIDCacheManager {
   static async init(): Promise<void> {
     // Create cache file if not exist
     try {
-      await fs.writeFile(POST_UUID_CACHE_FILE_PATH, "{}", { encoding: "utf8", flag: "wx" });
+      await fs.writeFile(POST_UUID_CACHE_FILE_PATH, "{}", { encoding: "utf8", flag: "wx", mode: 0o644 });
     } catch { /* Nothing */ }
 
     // Open cache file handle
     try {
-      this.cacheFileHandle = await fs.open(POST_UUID_CACHE_FILE_PATH, "a+", 0o644);
+      this.cacheFileHandle = await fs.open(POST_UUID_CACHE_FILE_PATH, "r+");
     } catch(error) {
       console.error("Can't create or open UUID cache file!");
       console.error(error);
