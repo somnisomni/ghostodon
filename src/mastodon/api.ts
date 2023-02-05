@@ -1,6 +1,7 @@
+import { MastodonAPIError, MastodonAPIResponseStatus } from "interface/mastodon";
 import config from "../../config/config.json";
 
-export async function createStatus(status: string, visibility: "public" | "unlisted" | "private" | "direct" = "public"): Promise<Record<string, unknown>> {
+export async function createStatus(status: string, visibility: "public" | "unlisted" | "private" | "direct" = "public"): Promise<MastodonAPIResponseStatus | MastodonAPIError> {
   const response = await fetch(`https://${config.mastodon.instanceHost}/api/v1/statuses`, {
     method: "POST",
     cache: "no-cache",
@@ -14,5 +15,9 @@ export async function createStatus(status: string, visibility: "public" | "unlis
     }),
   });
 
-  return (await response.json()) as Record<string, unknown>;
+  if(response.ok) {
+    return (await response.json()) as MastodonAPIResponseStatus;
+  } else {
+    return (await response.json()) as MastodonAPIError;
+  }
 }

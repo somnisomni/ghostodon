@@ -72,7 +72,12 @@ export default class WebhookListener {
         }
 
         console.log("  └ Creating new status on Mastodon...");
-        console.log(await createStatus(`Update! 『${body.title}』\n\n${body.url}`));
+        const response = await createStatus(`Update! 『${body.title}』\n\n${body.url}`);
+        if("error" in response) {
+          console.error(`    └ Failed to create a new Mastodon status: ${response.error}`);
+        } else {
+          console.log(`    └ Status successfully created. (${response.url})`);
+        }
 
         console.log(`  └ Caching UUID ${body.uuid}.`);
         await UUIDCacheManager.cacheUUID(body.uuid);
