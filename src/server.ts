@@ -3,6 +3,7 @@ import { FastifyInstance } from "fastify";
 import { GhostPost, GhostWebhookPost } from "./interface/ghost";
 import { SERVER_LOG_FILE_PATH } from "./constants";
 import UUIDCacheManager from "./uuid-cache";
+import { createStatus } from "./mastodon/api";
 import config from "../config/config.json";
 
 export default class WebhookListener {
@@ -70,10 +71,13 @@ export default class WebhookListener {
           return;
         }
 
-        // Mastodon API should be here
+        console.log("  └ Creating new status on Mastodon...");
+        console.log(await createStatus(`Update! 『${body.title}』\n\n${body.url}`));
+
         console.log(`  └ Caching UUID ${body.uuid}.`);
         await UUIDCacheManager.cacheUUID(body.uuid);
 
+        console.log();
         reply.code(200).send("OK");
       });
 
@@ -83,6 +87,7 @@ export default class WebhookListener {
         if(!body) return;
         console.log(`  └ Webhook parsed, "${body.title}" (${body.url})`);
 
+        console.log();
         reply.code(200).send("OK");
       });
     }
