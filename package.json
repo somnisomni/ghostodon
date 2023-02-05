@@ -1,0 +1,36 @@
+{
+  "name": "ghostodon",
+  "version": "0.0.0",
+  "description": "Ghost-Mastodon post sharing bridge server",
+  "main": "src/app.ts",
+  "scripts": {
+    "start": "ts-node .",
+    "build": "tsc",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "npm": "use-yarn",
+    "yarn": ">=3.4"
+  },
+  "engineStrict": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/somnisomni/Ghostodon.git"
+  },
+  "author": "somni <me@somni.one>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/somnisomni/Ghostodon/issues"
+  },
+  "homepage": "https://github.com/somnisomni/Ghostodon#readme",
+  "packageManager": "yarn@3.4.1",
+  "devDependencies": {
+    "@types/node": "^18.11.19",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "ts-node": "latest",
+    "typescript": "latest",
+    "typescript-eslint": "latest"
+  }
+}
