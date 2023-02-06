@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "baseUrl": "./src",
     "rootDir": "./",
     "moduleResolution": "node",
     "resolveJsonModule": true,
