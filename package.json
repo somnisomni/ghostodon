@@ -29,6 +29,8 @@
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
     "eslint": "latest",
+    "pino": "latest",
+    "pino-pretty": "latest",
     "ts-node": "latest",
     "typescript": "latest",
     "typescript-eslint": "latest"

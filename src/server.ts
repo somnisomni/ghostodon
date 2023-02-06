@@ -1,5 +1,6 @@
 import fastify, { FastifyLoggerOptions, FastifyReply, FastifyRequest } from "fastify";
 import { FastifyInstance } from "fastify";
+import pinoPretty from "pino-pretty";
 import { GhostPost, GhostWebhookPost } from "./interface/ghost";
 import { ACCESS_LOG_FILE_PATH } from "./util/constants";
 import UUIDCacheManager from "./util/uuid-cache";
@@ -12,8 +13,11 @@ export default class WebhookListener {
   constructor() {
     const loggerOption: Record<string, boolean | FastifyLoggerOptions> = {
       enabled: {
+        stream: pinoPretty({
+          colorize: false,
+          destination: ACCESS_LOG_FILE_PATH,
+        }),
         level: config.logging.loglevel || "info",
-        file: ACCESS_LOG_FILE_PATH,
       },
       disabled: false,
     };
@@ -65,7 +69,7 @@ export default class WebhookListener {
           return;
         }
 
-        if(!config.bridge.newStatus.onPostPublished) {
+        if(!config.bridge.status.postPublished) {
           console.log("  └ Creating new status on post publish is disabled. Nothing to do.");
           reply.code(200).send("OK, SHARING SKIPPED");
           return;
@@ -102,6 +106,7 @@ export default class WebhookListener {
   }
 
   listen() {
+    this.server.log.info("===== Webhook listener server startup =====");
     this.server.listen({ port: config.server.port || 50000 }).then(() => {
       const address = this.server.server.address();
 
