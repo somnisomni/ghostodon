@@ -1,13 +1,17 @@
 import * as fs from "fs/promises";
 import { UUIDCache } from "../interface/app";
 import { POST_UUID_CACHE_FILE_PATH } from "./constants";
+import Logger from "./logger";
 
 export default class UUIDCacheManager {
   static async init(): Promise<void> {
     // Create cache file if not exist
     try {
       await fs.writeFile(POST_UUID_CACHE_FILE_PATH, "{}", { encoding: "utf8", flag: "wx", mode: 0o644 });
-    } catch { /* Nothing */ }
+    } catch(error) {
+      Logger.e("Failed to create UUID cache file.");
+      Logger.e(error);
+    }
   }
 
   private static async readUUIDCache(): Promise<UUIDCache> {
