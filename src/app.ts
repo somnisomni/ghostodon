@@ -1,5 +1,5 @@
 import WebhookListener from "./server";
-import UUIDCacheManager from "./uuid-cache";
+import UUIDCacheManager from "./util/uuid-cache";
 
 UUIDCacheManager.init();
 

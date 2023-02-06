@@ -1,5 +1,5 @@
 import * as fs from "fs/promises";
-import { UUIDCache } from "./interface/app";
+import { UUIDCache } from "../interface/app";
 import { POST_UUID_CACHE_FILE_PATH } from "./constants";
 
 export default class UUIDCacheManager {

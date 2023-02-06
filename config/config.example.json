@@ -10,6 +10,7 @@
     "instanceHost": "blog.example.com"
   },
   "mastodon": {
+    "instanceHost": "mastodon.example.com",
     "accessToken": "0000000000000000000-00000000000000000000000"
   },
   "bridge": {

@@ -1,8 +1,8 @@
 import fastify, { FastifyLoggerOptions, FastifyReply, FastifyRequest } from "fastify";
 import { FastifyInstance } from "fastify";
 import { GhostPost, GhostWebhookPost } from "./interface/ghost";
-import { SERVER_LOG_FILE_PATH } from "./constants";
-import UUIDCacheManager from "./uuid-cache";
+import { SERVER_LOG_FILE_PATH } from "./util/constants";
+import UUIDCacheManager from "./util/uuid-cache";
 import { createStatus } from "./mastodon/api";
 import config from "../config/config.json";
 
