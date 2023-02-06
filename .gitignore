@@ -182,4 +182,5 @@ dist
 ## Project specific
 # config file
 config/config.json
+config/.post-cache.json
 build/
