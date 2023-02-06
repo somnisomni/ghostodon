@@ -6,6 +6,7 @@ import { ACCESS_LOG_FILE_PATH } from "./util/constants";
 import UUIDCacheManager from "./util/uuid-cache";
 import Config from "./util/config-loader";
 import { createStatus } from "./mastodon/api";
+import Logger from "./util/logger";
 
 export default class WebhookListener {
   private readonly server: FastifyInstance;
@@ -30,7 +31,7 @@ export default class WebhookListener {
 
   private setup() {
     const commonWebhookRouteHandler = (request: FastifyRequest, reply: FastifyReply): GhostPost | null => {
-      console.info(`${request.method.toUpperCase()} ${request.routerPath}`);
+      Logger.i(`${request.method.toUpperCase()} ${request.routerPath}`);
 
       if(!("post" in (request.body as Record<string, unknown>))) {
         console.warn("  └ No 'post' property in request body; is it valid Webhook request from Ghost?");
@@ -60,36 +61,36 @@ export default class WebhookListener {
       this.server.post("/post/new", async (request, reply) => {
         const body = commonWebhookRouteHandler(request, reply);
         if(!body) return;
-        console.log(`  └ Webhook parsed, "${body.title}" (${body.url})`);
+        Logger.i(`  └ Webhook parsed, "${body.title}" (${body.url})`);
 
         // Once published, uuid of the post should be stored to prevent recreate status after unpublish-publish
         if(await UUIDCacheManager.hasUUID(body.uuid)) {
-          console.log(`  └ UUID ${body.uuid} is already published at least once. Nothing to do.`);
+          Logger.i(`  └ UUID ${body.uuid} is already published at least once. Nothing to do.`);
           reply.code(200).send("OK, DUPLICATED");
           return;
         }
 
         if(!Config.config.bridge.status.postPublished) {
-          console.log("  └ Creating new status on post publish is disabled. Nothing to do.");
+          Logger.i("  └ Creating new status on post publish is disabled. Nothing to do.");
           reply.code(200).send("OK, SHARING SKIPPED");
           return;
         }
 
-        console.log("  └ Creating new status on Mastodon...");
+        Logger.i("  └ Creating new status on Mastodon...");
         const response = await createStatus(`Update! 『${body.title}』\n\n${body.url}`);
         if("error" in response) {
-          console.error(`    └ Failed to create a new Mastodon status: ${response.error}`);
+          Logger.e(`    └ Failed to create a new Mastodon status: ${response.error}`);
           reply.code(500).send("ERROR, FAILED TO SHARE");
           return;
         } else {
-          console.log(`    └ Status successfully created. (${response.url})`);
+          Logger.i(`    └ Status successfully created. (${response.url})`);
         }
 
-        console.log(`  └ Caching UUID ${body.uuid}...`);
+        Logger.i(`  └ Caching UUID ${body.uuid}...`);
         await UUIDCacheManager.cacheUUID(body.uuid);
-        console.log("  └ UUID cached.");
+        Logger.i("  └ UUID cached.");
 
-        console.log();
+        Logger.nl();
         reply.code(200).send("OK");
       });
 
@@ -97,9 +98,9 @@ export default class WebhookListener {
       this.server.post("/post/update", (request, reply) => {
         const body = commonWebhookRouteHandler(request, reply);
         if(!body) return;
-        console.log(`  └ Webhook parsed, "${body.title}" (${body.url})`);
+        Logger.i(`  └ Webhook parsed, "${body.title}" (${body.url})`);
 
-        console.log();
+        Logger.nl();
         reply.code(200).send("OK");
       });
     }
@@ -112,14 +113,14 @@ export default class WebhookListener {
 
       if(address) {
         if(typeof address === "string") {
-          console.info(`Webhook listener is running on ${address}`);
+          Logger.i(`Webhook listener is running on ${address}`);
         } else if(typeof address === "object") {
-          console.info(`Webhook listener is running on ${address.address}:${address.port}`);
+          Logger.i(`Webhook listener is running on ${address.address}:${address.port}`);
         }
       }
     }).catch((reason) => {
-      console.error("Error caused during start up the Webhook listener!");
-      console.error(reason);
+      Logger.e("Error caused during start up the Webhook listener!");
+      Logger.e(reason);
     });
   }
 }

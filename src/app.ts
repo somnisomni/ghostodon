@@ -3,6 +3,7 @@ import WebhookListener from "./server";
 import UUIDCacheManager from "./util/uuid-cache";
 import { CONFIG_FOLDER_PATH, LOG_FOLDER_PATH } from "./util/constants";
 import Config from "./util/config-loader";
+import Logger from "./util/logger";
 import appPackage from "../package.json";
 
 async function appInit() {
@@ -15,7 +16,10 @@ async function appInit() {
 }
 
 async function main() {
-  console.info(`\n  ◆ Ghostodon v${appPackage.version}\n`);
+  console.info();
+  Logger.i("");
+  Logger.i(`  ◆ Ghostodon v${appPackage.version}`);
+  console.info();
 
   await appInit();
   await UUIDCacheManager.init();

@@ -1,6 +1,7 @@
 import * as fs from "fs/promises";
 import { AppConfig } from "../interface/app";
 import { CONFIG_FILE_PATH } from "./constants";
+import Logger from "./logger";
 
 export default class Config {
   static config: AppConfig;
@@ -34,8 +35,8 @@ export default class Config {
     try {
       raw = await fs.readFile(CONFIG_FILE_PATH, { encoding: "utf8" });
     } catch(error) {
-      console.error("Error while reading configuration file; is it exist and accessible?");
-      console.error(error);
+      Logger.e("Error while reading configuration file; is it exist and accessible?");
+      Logger.e(error);
       return false;
     }
 
@@ -43,8 +44,8 @@ export default class Config {
     try {
       parsed = JSON.parse(raw) as AppConfig;
     } catch(error) {
-      console.error("Error while parsing configration file; is it in valid JSON format?");
-      console.error(error);
+      Logger.e("Error while parsing configration file; is it in valid JSON format?");
+      Logger.e(error);
       return false;
     }
 
@@ -55,16 +56,16 @@ export default class Config {
         || !parsed.ghost.instanceHost
         || !parsed.mastodon.instanceHost
         || !parsed.mastodon.accessToken) {
-        console.error("Some important configurations are missing.");
+        Logger.e("Some important configurations are missing.");
         return false;
       }
     } else {
-      console.error("Something wrong while loading configurations.");
+      Logger.e("Something wrong while loading configurations.");
       return false;
     }
 
     this.config = { ...this.defaultConfigMap, ...parsed };
-    console.info("Configuration loaded.");
+    Logger.i("Configuration loaded.");
     return true;
   }
 }
