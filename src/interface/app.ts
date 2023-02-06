@@ -1,3 +1,5 @@
+import { LevelWithSilent } from "pino";
+
 export interface UUIDCache {
   [key: string]: boolean;
 }
@@ -8,7 +10,7 @@ export interface AppConfig {
   },
   logging: {
     enable: boolean,
-    loglevel: "fatal" | "error" | "warn" | "info" | "debug" | "trace" | "silent",
+    loglevel: LevelWithSilent,
   },
   ghost: {
     instanceHost: string,
@@ -20,7 +22,7 @@ export interface AppConfig {
   bridge: {
     redirectGhostInstanceIfNotFound: boolean,
     preventDuplicatedPublishStatus: boolean,
-    status: {
+    status: Record<string, string | boolean> & {
       postPublished: string | boolean,
       postUpdated: string | boolean,
     },

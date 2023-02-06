@@ -74,16 +74,18 @@ export default class WebhookListener {
           Logger.i("  └ Creating new status on post publish is disabled. Nothing to do.");
           reply.code(200).send("OK, SHARING SKIPPED");
           return;
-        }
-
-        Logger.i("  └ Creating new status on Mastodon...");
-        const response = await createStatus(`Update! 『${body.title}』\n\n${body.url}`);
-        if("error" in response) {
-          Logger.e(`    └ Failed to create a new Mastodon status: ${response.error}`);
-          reply.code(500).send("ERROR, FAILED TO SHARE");
-          return;
         } else {
-          Logger.i(`    └ Status successfully created. (${response.url})`);
+          if(typeof Config.config.bridge.status.postPublished === "string") {
+            Logger.i("  └ Creating new status on Mastodon...");
+            const response = await createStatus(this.formatStatusText(Config.config.bridge.status.postPublished, body));
+            if("error" in response) {
+              Logger.e(`    └ Failed to create a new Mastodon status: ${response.error}`);
+              reply.code(500).send("ERROR, FAILED TO SHARE");
+              return;
+            } else {
+              Logger.i(`    └ Status successfully created. (${response.url})`);
+            }
+          }
         }
 
         Logger.i(`  └ Caching UUID ${body.uuid}...`);
@@ -104,6 +106,19 @@ export default class WebhookListener {
         reply.code(200).send("OK");
       });
     }
+  }
+
+  private formatStatusText(text: string, ghostPost: GhostPost): string {
+    return text
+      .replaceAll("{title}", ghostPost.title)
+      .replaceAll("{url}", ghostPost.url)
+      .replaceAll("{post_id}", ghostPost.id)
+      .replaceAll("{slug}", ghostPost.slug)
+      .replaceAll("{text}", ghostPost.plaintext)
+      .replaceAll("{excerpt}", ghostPost.excerpt)
+      .replaceAll("{excerpt_custom}", ghostPost.custom_excerpt || "")
+      .replaceAll("{reading_time}", ghostPost.reading_time.toString())
+      .replaceAll("{primary_tag}", ghostPost.primary_tag || "");
   }
 
   listen() {

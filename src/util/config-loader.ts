@@ -65,6 +65,12 @@ export default class Config {
     }
 
     this.config = { ...this.defaultConfigMap, ...parsed };
+    ["postPublished", "postUpdated"].forEach((v) => {
+      if(this.config.bridge.status[v] === true) {
+        this.config.bridge.status[v] = this.defaultConfigMap.bridge.status[v];
+      }
+    });
+
     Logger.i("Configuration loaded.");
     return true;
   }
