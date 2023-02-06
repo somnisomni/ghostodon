@@ -1,7 +1,7 @@
 import fastify, { FastifyLoggerOptions, FastifyReply, FastifyRequest } from "fastify";
 import { FastifyInstance } from "fastify";
 import { GhostPost, GhostWebhookPost } from "./interface/ghost";
-import { SERVER_LOG_FILE_PATH } from "./util/constants";
+import { ACCESS_LOG_FILE_PATH } from "./util/constants";
 import UUIDCacheManager from "./util/uuid-cache";
 import { createStatus } from "./mastodon/api";
 import config from "../config/config.json";
@@ -13,7 +13,7 @@ export default class WebhookListener {
     const loggerOption: Record<string, boolean | FastifyLoggerOptions> = {
       enabled: {
         level: config.logging.loglevel || "info",
-        file: SERVER_LOG_FILE_PATH,
+        file: ACCESS_LOG_FILE_PATH,
       },
       disabled: false,
     };
