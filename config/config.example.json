@@ -17,7 +17,7 @@
     "redirectGhostInstanceIfNotFound": true,
     "preventDuplicatedPublishStatus": true,
     "status": {
-      "postPublished": true,
+      "postPublished": "A new post published! 『{title}』\n\n{url}",
       "postUpdated": false
     }
   }
