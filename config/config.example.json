@@ -15,9 +15,10 @@
   },
   "bridge": {
     "redirectGhostInstanceIfNotFound": true,
-    "newStatus": {
-      "onPostPublished": true,
-      "onPostUpdated": false
+    "preventDuplicatedPublishStatus": true,
+    "status": {
+      "postPublished": true,
+      "postUpdated": false
     }
   }
 }

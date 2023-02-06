@@ -4,8 +4,8 @@ import pinoPretty from "pino-pretty";
 import { GhostPost, GhostWebhookPost } from "./interface/ghost";
 import { ACCESS_LOG_FILE_PATH } from "./util/constants";
 import UUIDCacheManager from "./util/uuid-cache";
+import Config from "./util/config-loader";
 import { createStatus } from "./mastodon/api";
-import config from "../config/config.json";
 
 export default class WebhookListener {
   private readonly server: FastifyInstance;
@@ -17,13 +17,13 @@ export default class WebhookListener {
           colorize: false,
           destination: ACCESS_LOG_FILE_PATH,
         }),
-        level: config.logging.loglevel || "info",
+        level: Config.config.logging.loglevel,
       },
       disabled: false,
     };
 
     this.server = fastify({
-      logger: loggerOption[config.logging.enable ? "enabled" : "disabled"],
+      logger: loggerOption[Config.config.logging.enable ? "enabled" : "disabled"],
     });
     this.setup();
   }
@@ -44,8 +44,8 @@ export default class WebhookListener {
     if(this.server) {
       // Default handler
       this.server.setNotFoundHandler((_, reply) => {
-        if(config.bridge.redirectGhostInstanceIfNotFound) {
-          reply.redirect(307, `https://${config.ghost.instanceHost}`);
+        if(Config.config.bridge.redirectGhostInstanceIfNotFound) {
+          reply.redirect(307, `https://${Config.config.ghost.instanceHost}`);
         } else {
           reply.code(404).send("Not found");
         }
@@ -69,7 +69,7 @@ export default class WebhookListener {
           return;
         }
 
-        if(!config.bridge.status.postPublished) {
+        if(!Config.config.bridge.status.postPublished) {
           console.log("  └ Creating new status on post publish is disabled. Nothing to do.");
           reply.code(200).send("OK, SHARING SKIPPED");
           return;
@@ -107,7 +107,7 @@ export default class WebhookListener {
 
   listen() {
     this.server.log.info("===== Webhook listener server startup =====");
-    this.server.listen({ port: config.server.port || 50000 }).then(() => {
+    this.server.listen({ port: Config.config.server.port || 50000 }).then(() => {
       const address = this.server.server.address();
 
       if(address) {
