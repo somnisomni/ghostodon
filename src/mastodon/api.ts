@@ -1,4 +1,4 @@
-import { MastodonAPIError, MastodonAPIResponseStatus } from "interface/mastodon";
+import { MastodonAPIError, MastodonAPIResponseStatus } from "../interface/mastodon";
 import config from "../../config/config.json";
 
 export async function createStatus(status: string, visibility: "public" | "unlisted" | "private" | "direct" = "public"): Promise<MastodonAPIResponseStatus | MastodonAPIError> {
