@@ -1,0 +1,10 @@
+# Folders
+.git
+.yarn
+config
+build
+node_modules
+
+# Files
+Dockerfile
+!.yarn/releases/*
