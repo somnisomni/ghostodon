@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy source files
 COPY . .
 
+# Use example configuration file as base config
+RUN cp config/config.example.json config/config.json
+
 # Install Node.js global dependencies
 RUN npm install -f --location=global yarn@latest
 
@@ -14,5 +17,5 @@ RUN npm install -f --location=global yarn@latest
 RUN yarn install --immutable
 
 # Entrypoint
-RUN yarn start
+ENTRYPOINT [ "yarn", "start" ]
 EXPOSE 50000
