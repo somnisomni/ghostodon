@@ -117,7 +117,7 @@ export default class WebhookListener {
       .replaceAll("{text}", ghostPost.plaintext)
       .replaceAll("{excerpt}", ghostPost.excerpt)
       .replaceAll("{excerpt_custom}", ghostPost.custom_excerpt || "")
-      .replaceAll("{reading_time}", ghostPost.reading_time.toString())
+      .replaceAll("{reading_time}", (ghostPost.reading_time || 0).toString())
       .replaceAll("{primary_tag}", ghostPost.primary_tag || "");
   }
 
