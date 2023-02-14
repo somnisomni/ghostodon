@@ -1,3 +1,7 @@
+### Simple Dockerfile for Ghostodon ###
+## Port expose : 50000 (Webhook server itself)
+## Volume bind (recommended) : /app/config (config/cache/log files)
+
 # Use Node.js v18 LTS, Alpine image
 FROM node:18-alpine
 
@@ -17,5 +21,5 @@ RUN npm install -f --location=global yarn@latest
 RUN yarn install --immutable
 
 # Entrypoint
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "yarn", "start:prod" ]
 EXPOSE 50000
