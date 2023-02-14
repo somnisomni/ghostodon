@@ -6,6 +6,7 @@ export interface UUIDCache {
 
 export interface AppConfig {
   server: {
+    localhostOnly: boolean,
     port: number,
   },
   logging: {

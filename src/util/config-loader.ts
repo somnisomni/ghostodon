@@ -6,6 +6,7 @@ export default class Config {
   static config: AppConfig;
   private static defaultConfigMap: AppConfig = {
     server: {
+      localhostOnly: false,
       port: 50000,
     },
     logging: {

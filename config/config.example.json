@@ -1,5 +1,6 @@
 {
   "server": {
+    "localhostOnly": false,
     "port": 50000
   },
   "logging": {

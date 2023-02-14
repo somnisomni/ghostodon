@@ -123,7 +123,10 @@ export default class WebhookListener {
 
   listen() {
     this.server.log.info("===== Webhook listener server startup =====");
-    this.server.listen({ port: Config.config.server.port || 50000 }).then(() => {
+    this.server.listen({
+      host: Config.config.server.localhostOnly ? "127.0.0.1" : "0.0.0.0",
+      port: Config.config.server.port || 50000,
+    }).then(() => {
       const address = this.server.server.address();
 
       if(address) {
