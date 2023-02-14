@@ -134,7 +134,7 @@ export default class WebhookListener {
         }
       }
     }).catch((reason) => {
-      Logger.e("Error caused during start up the Webhook listener!");
+      Logger.e("Error caused while starting up the Webhook listener!");
       Logger.e(reason);
     });
   }
