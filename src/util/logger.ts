@@ -1,34 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import pino from "pino";
 import pinoPretty from "pino-pretty";
+import Config from "./config-loader";
 import { ACTIVITY_LOG_FILE_PATH } from "./constants";
 
 export default class Logger {
-  private static pinoFile = pino({
-    name: "ghostodon",
-  }, pinoPretty({
-    colorize: false,
-    destination: ACTIVITY_LOG_FILE_PATH,
-  }));
+  private static pinoInstance: pino.Logger;
 
-  static i(obj: any) {
-    console.info(obj);
-    this.pinoFile.info(obj);
+  static init() {
+    this.pinoInstance = pino({
+      name: "ghostodon",
+      enabled: Config.config.logging.enable,
+    }, pinoPretty({
+      colorize: false,
+      destination: ACTIVITY_LOG_FILE_PATH,
+    }));
   }
 
-  static e(obj: any) {
-    console.error(obj);
-    this.pinoFile.error(obj);
+  static i(obj: any, consoleOutput = true) {
+    if(consoleOutput) console.info(obj);
+    this.pinoInstance.info(obj);
   }
 
-  static w(obj: any) {
-    console.warn(obj);
-    this.pinoFile.warn(obj);
+  static e(obj: any, consoleOutput = true) {
+    if(consoleOutput) console.error(obj);
+    this.pinoInstance.error(obj);
   }
 
-  static d(obj: any) {
-    console.debug(obj);
-    this.pinoFile.debug(obj);
+  static w(obj: any, consoleOutput = true) {
+    if(consoleOutput) console.warn(obj);
+    this.pinoInstance.warn(obj);
+  }
+
+  static d(obj: any, consoleOutput = true) {
+    if(consoleOutput) console.debug(obj);
+    this.pinoInstance.debug(obj);
   }
 
   static nl() {

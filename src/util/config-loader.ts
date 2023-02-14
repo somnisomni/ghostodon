@@ -1,7 +1,6 @@
 import * as fs from "fs/promises";
 import { AppConfig } from "../interface/app";
 import { CONFIG_FILE_PATH } from "./constants";
-import Logger from "./logger";
 
 export default class Config {
   static config: AppConfig;
@@ -15,6 +14,7 @@ export default class Config {
     },
     ghost: {
       instanceHost: "nonexistance.url",
+      restrictSenderHost: true,
     },
     mastodon: {
       instanceHost: "nonexistance.url",
@@ -35,8 +35,8 @@ export default class Config {
     try {
       raw = await fs.readFile(CONFIG_FILE_PATH, { encoding: "utf8" });
     } catch(error) {
-      Logger.e("Error while reading configuration file; is it exist and accessible?");
-      Logger.e(error);
+      console.error("Error while reading configuration file; is it exist and accessible?");
+      console.error(error);
       return false;
     }
 
@@ -44,8 +44,8 @@ export default class Config {
     try {
       parsed = JSON.parse(raw) as AppConfig;
     } catch(error) {
-      Logger.e("Error while parsing configration file; is it in valid JSON format?");
-      Logger.e(error);
+      console.error("Error while parsing configration file; is it in valid JSON format?");
+      console.error(error);
       return false;
     }
 
@@ -56,11 +56,11 @@ export default class Config {
         || !parsed.ghost.instanceHost
         || !parsed.mastodon.instanceHost
         || !parsed.mastodon.accessToken) {
-        Logger.e("Some important configurations are missing.");
+        console.error("Some important configurations are missing.");
         return false;
       }
     } else {
-      Logger.e("Something wrong while loading configurations.");
+      console.error("Something wrong while loading configurations.");
       return false;
     }
 
@@ -71,7 +71,6 @@ export default class Config {
       }
     });
 
-    Logger.i("Configuration loaded.");
     return true;
   }
 }

@@ -13,14 +13,16 @@ async function appInit() {
 
   // Load configurations
   if(!await Config.load()) process.exit(1);
+
+  // Initialize app activity logger
+  Logger.init();
+  Logger.i("", false);
+  Logger.i("");
+  Logger.i(`  ◆ Ghostodon v${appPackage.version}`);
+  Logger.i("");
 }
 
 async function main() {
-  console.info();
-  Logger.i("");
-  Logger.i(`  ◆ Ghostodon v${appPackage.version}`);
-  console.info();
-
   await appInit();
   await UUIDCacheManager.init();
 

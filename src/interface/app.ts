@@ -1,4 +1,4 @@
-import { LevelWithSilent } from "pino";
+import pino from "pino";
 
 export interface UUIDCache {
   [key: string]: boolean;
@@ -10,10 +10,11 @@ export interface AppConfig {
   },
   logging: {
     enable: boolean,
-    loglevel: LevelWithSilent,
+    loglevel: pino.LevelWithSilent,
   },
   ghost: {
     instanceHost: string,
+    restrictSenderHost: boolean,
   },
   mastodon: {
     instanceHost: string,
@@ -22,9 +23,9 @@ export interface AppConfig {
   bridge: {
     redirectGhostInstanceIfNotFound: boolean,
     preventDuplicatedPublishStatus: boolean,
-    status: Record<string, string | boolean> & {
+    status: {
       postPublished: string | boolean,
       postUpdated: string | boolean,
-    },
+    } & Record<string, string | boolean>,
   },
 }
