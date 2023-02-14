@@ -46,7 +46,7 @@ export default class WebhookListener {
       // Default handler
       this.server.setNotFoundHandler((_, reply) => {
         if(Config.config.bridge.redirectGhostInstanceIfNotFound) {
-          reply.redirect(307, `https://${Config.config.ghost.instanceHost}`);
+          reply.redirect(301, `https://${Config.config.ghost.instanceHost}`);
         } else {
           reply.code(404).send("Not found");
         }
