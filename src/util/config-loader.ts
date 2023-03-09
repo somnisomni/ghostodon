@@ -36,7 +36,7 @@ export default class Config {
     try {
       raw = await fs.readFile(CONFIG_FILE_PATH, { encoding: "utf8" });
     } catch(error) {
-      console.error("Error while reading configuration file; is it exist and accessible?");
+      console.error("Error while reading configuration file; is it exist and accessible?\n");
       console.error(error);
       return false;
     }
@@ -45,7 +45,7 @@ export default class Config {
     try {
       parsed = JSON.parse(raw) as AppConfig;
     } catch(error) {
-      console.error("Error while parsing configration file; is it in valid JSON format?");
+      console.error("Error while parsing configration file; is it in valid JSON format?\n");
       console.error(error);
       return false;
     }
