@@ -31,7 +31,7 @@ export default class WebhookListener {
 
   private setup() {
     const commonWebhookRouteHandler = (request: FastifyRequest, reply: FastifyReply): GhostPost | null => {
-      Logger.i(`${request.method.toUpperCase()} ${request.routerPath}`);
+      Logger.i(`${request.method.toUpperCase()} ${request.routeOptions.url}`);
 
       if(!("post" in (request.body as Record<string, unknown>))) {
         console.warn("  └ No 'post' property in request body; is it valid Webhook request from Ghost?");
@@ -46,7 +46,7 @@ export default class WebhookListener {
       // Default handler
       this.server.setNotFoundHandler((_, reply) => {
         if(Config.config.bridge.redirectGhostInstanceIfNotFound) {
-          reply.redirect(301, `https://${Config.config.ghost.instanceHost}`);
+          reply.code(301).redirect(`https://${Config.config.ghost.instanceHost}`);
         } else {
           reply.code(404).send("Not found");
         }
