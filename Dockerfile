@@ -2,8 +2,8 @@
 ## Port expose : 50000 (Webhook server itself)
 ## Volume bind (recommended) : /app/config (config/cache/log files)
 
-# Use Node.js v20 LTS, Alpine image
-FROM node:20-alpine
+# Use Node.js v24 LTS, Alpine image
+FROM node:24-alpine
 
 # Set working directory to /app
 WORKDIR /app
