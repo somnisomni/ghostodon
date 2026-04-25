@@ -32,7 +32,7 @@ export default class Config {
   };
 
   static async load(): Promise<boolean> {
-    let raw = "";
+    let raw: string;
     try {
       raw = await fs.readFile(CONFIG_FILE_PATH, { encoding: "utf8" });
     } catch(error) {
@@ -41,7 +41,7 @@ export default class Config {
       return false;
     }
 
-    let parsed: AppConfig | null = null;
+    let parsed: AppConfig;
     try {
       parsed = JSON.parse(raw) as AppConfig;
     } catch(error) {
